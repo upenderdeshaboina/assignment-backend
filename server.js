@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const dbPath = path.join(__dirname, 'transactions.db');
-let db = new sqlite3.Database(dbPath, (err) => {
+let db = new sqlite3.Database(dbPath, async(err) => {
     if (err) {
         console.error('Error opening database', err.message);
     } else {
@@ -72,7 +72,7 @@ app.get('/transactions', (req, res) => {
 app.post('/transactions', async (req, res) => {
     const { type, amount, description, date } = req.body;
     if (!type || !amount || !date) {
-        return res.status(400).send('Type, amount, and date are required');
+        return res.status(400).send('type, amount, and date are required');
     }
     const running_balance = await calculateRunningBalance();
     db.run(`INSERT INTO transactions (type, amount, description, date, running_balance) VALUES (?, ?, ?, ?, ?)`,
@@ -90,7 +90,7 @@ app.put('/transactions/:id', async (req, res) => {
     const { id } = req.params;
     const { type, amount, description, date } = req.body;
     if (!type || !amount || !date) {
-        return res.status(400).send('Type, amount, and date are required');
+        return res.status(400).send('type, amount, and date are required');
     }
 
     db.run(`UPDATE transactions SET type = ?, amount = ?, description = ?, date = ? WHERE id = ?`,
@@ -116,6 +116,6 @@ app.delete('/transactions/:id', (req, res) => {
     });
 });
 
-app.listen(3004, () => {
-    console.log('Server is running on port 3000');
+app.listen(3005, () => {
+    console.log('Server is running on port 3005');
 });
