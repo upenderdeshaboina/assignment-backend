@@ -60,7 +60,7 @@ const updateBalances = async () => {
 };
 
 app.get('/transactions', (req, res) => {
-    db.all('SELECT * FROM transactions ORDER BY date, id', [], (err, rows) => {
+    db.all('SELECT * FROM transactions ORDER BY date desc, id', [], (err, rows) => {
         if (err) {
             res.status(500).send(err.message);
         } else {
